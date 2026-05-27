@@ -349,8 +349,8 @@
     <div class="field">
       <label>Tipo de residência</label>
       <div class="toggle-group">
-        <button class="tog active" id="orig_casa" onclick="setTipo('orig','casa')">🏠 Casa</button>
-        <button class="tog" id="orig_apto" onclick="setTipo('orig','apto')">🏢 Apartamento</button>
+        <button class="tog active" id="orig_casa" onclick="setTipo('orig','casa')">Casa</button>
+        <button class="tog" id="orig_apto" onclick="setTipo('orig','apto')">Apartamento</button>
       </div>
     </div>
     <div class="field" id="orig_elev_field" style="display:none;">
@@ -367,8 +367,8 @@
     <div class="field">
       <label>Tipo de residência</label>
       <div class="toggle-group">
-        <button class="tog active" id="dest_casa" onclick="setTipo('dest','casa')">🏠 Casa</button>
-        <button class="tog" id="dest_apto" onclick="setTipo('dest','apto')">🏢 Apartamento</button>
+        <button class="tog active" id="dest_casa" onclick="setTipo('dest','casa')">Casa</button>
+        <button class="tog" id="dest_apto" onclick="setTipo('dest','apto')">Apartamento</button>
       </div>
     </div>
     <div class="field" id="dest_elev_field" style="display:none;">
@@ -414,19 +414,19 @@
     </div>
     <div class="config-row">
       <label>Viagem extra<small>A partir da 2ª viagem</small></label>
-      <input type="number" id="cfg_viagem" value="80" step="10" inputmode="numeric">
+      <input type="number" id="cfg_viagem" value="70" step="10" inputmode="numeric">
     </div>
     <div class="config-row">
       <label>Por ajudante<small>Valor fixo cobrado se levar ajudante</small></label>
-      <input type="number" id="cfg_ajudante" value="120" step="10" inputmode="numeric">
+      <input type="number" id="cfg_ajudante" value="50" step="10" inputmode="numeric">
     </div>
     <div class="config-row">
       <label>Adicional apartamento<small>Cobrado se for apto (com ou sem elevador)</small></label>
-      <input type="number" id="cfg_apto" value="50" step="10" inputmode="numeric">
+      <input type="number" id="cfg_apto" value="30" step="10" inputmode="numeric">
     </div>
     <div class="config-row">
       <label>Adicional sem elevador<small>Cobrado se apto não tiver elevador</small></label>
-      <input type="number" id="cfg_semElev" value="40" step="5" inputmode="numeric">
+      <input type="number" id="cfg_semElev" value="25" step="5" inputmode="numeric">
     </div>
   </div>
   <button class="save-btn" onclick="salvarConfig()">Salvar configurações</button>
