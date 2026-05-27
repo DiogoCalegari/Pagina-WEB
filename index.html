@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Silvio Fretes">
+<title>Silvio Fretes</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #F5F3EE;
+    --card: #FFFFFF;
+    --accent: #1A472A;
+    --accent-light: #E8F0EA;
+    --accent-mid: #2D6A4F;
+    --text: #1C1C1C;
+    --muted: #6B6B6B;
+    --border: #E0DDD6;
+    --success: #1A472A;
+    --input-bg: #F9F8F5;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: 2rem;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  header {
+    background: var(--accent);
+    color: white;
+    padding: 1.25rem 1.25rem 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  header h1 {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  header p {
+    font-size: 12px;
+    opacity: 0.7;
+    margin-top: 2px;
+  }
+
+  .tabs {
+    display: flex;
+    background: var(--accent);
+    padding: 0 1.25rem 0.75rem;
+    gap: 8px;
+  }
+
+  .tab {
+    flex: 1;
+    padding: 7px 0;
+    border-radius: 8px;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    background: rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.75);
+    transition: all 0.2s;
+  }
+
+  .tab.active {
+    background: white;
+    color: var(--accent);
+  }
+
+  .page { display: none; padding: 1rem 1.25rem; }
+  .page.active { display: block; }
+
+  .card {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 1.1rem 1.15rem;
+    margin-bottom: 0.85rem;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+  }
+
+  .card-title {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-bottom: 0.85rem;
+  }
+
+  .field { margin-bottom: 0.85rem; }
+  .field:last-child { margin-bottom: 0; }
+
+  .field label {
+    display: block;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 5px;
+    font-weight: 500;
+  }
+
+  .field input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    font-size: 16px;
+    font-family: 'DM Sans', sans-serif;
+    background: var(--input-bg);
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s;
+    -webkit-appearance: none;
+  }
+
+  .field input:focus { border-color: var(--accent-mid); }
+
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  .toggle-group { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+
+  .tog {
+    padding: 9px 6px;
+    border-radius: 9px;
+    border: 1px solid var(--border);
+    background: var(--input-bg);
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s;
+  }
+
+  .tog.active {
+    background: var(--accent-light);
+    color: var(--accent);
+    border-color: var(--accent-mid);
+  }
+
+  .calc-btn {
+    width: 100%;
+    padding: 14px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 0.25rem;
+    transition: opacity 0.15s;
+    letter-spacing: -0.01em;
+  }
+
+  .calc-btn:active { opacity: 0.85; }
+
+  .result-hidden { display: none; }
+
+  .result-total {
+    background: var(--accent);
+    color: white;
+    border-radius: 14px;
+    padding: 1.25rem;
+    text-align: center;
+    margin-bottom: 0.85rem;
+  }
+
+  .result-total .label { font-size: 12px; opacity: 0.75; margin-bottom: 4px; }
+
+  .result-total .value {
+    font-family: 'DM Mono', monospace;
+    font-size: 36px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+
+  .item-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+  }
+
+  .item-row:last-child { border-bottom: none; }
+  .item-row .item-label { color: var(--muted); }
+  .item-row .item-val { font-weight: 600; font-family: 'DM Mono', monospace; font-size: 13px; }
+
+  .share-btn {
+    width: 100%;
+    padding: 12px;
+    background: transparent;
+    color: var(--accent);
+    border: 1.5px solid var(--accent);
+    border-radius: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    transition: all 0.15s;
+  }
+
+  .share-btn:active { background: var(--accent-light); }
+
+  .config-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    gap: 12px;
+  }
+
+  .config-row:last-child { border-bottom: none; }
+
+  .config-row label {
+    font-size: 14px;
+    color: var(--text);
+    flex: 1;
+  }
+
+  .config-row small {
+    display: block;
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 1px;
+  }
+
+  .config-row input {
+    width: 85px;
+    padding: 7px 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 15px;
+    font-family: 'DM Sans', sans-serif;
+    background: var(--input-bg);
+    color: var(--text);
+    text-align: right;
+    outline: none;
+    -webkit-appearance: none;
+  }
+
+  .config-row input:focus { border-color: var(--accent-mid); }
+
+  .saved-badge {
+    display: none;
+    font-size: 11px;
+    color: var(--success);
+    font-weight: 600;
+    text-align: center;
+    padding: 6px;
+  }
+
+  .save-btn {
+    width: 100%;
+    padding: 12px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 0.5rem;
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: #1C1C1C;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 500;
+    transition: transform 0.3s ease;
+    z-index: 100;
+    white-space: nowrap;
+  }
+
+  .toast.show { transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Calculadora de Frete - Silvio Fretes</h1>
+  <p>Orçamento de viagem</p>
+</header>
+
+<div class="tabs">
+  <button class="tab active" onclick="setTab('calcular', event)">Calcular</button>
+  <button class="tab" onclick="setTab('resultado', event)">Resultado</button>
+  <button class="tab" onclick="setTab('config', event)">Configurações</button>
+</div>
+
+<div id="tab-calcular" class="page active">
+
+  <div class="card">
+    <div class="card-title">Distância e viagens</div>
+    <div class="field-row">
+      <div class="field">
+        <label>Distância (km)</label>
+        <input type="number" id="distancia" placeholder="Ex: 45" inputmode="decimal">
+      </div>
+      <div class="field">
+        <label>Nº de viagens</label>
+        <input type="number" id="viagens" placeholder="1" inputmode="numeric" value="1" min="1">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Ajudantes</div>
+    <div class="field">
+      <label>Vai levar ajudante?</label>
+      <div class="toggle-group">
+        <button class="tog" id="ajudante_sim" onclick="setAjudante('sim')">Sim</button>
+        <button class="tog active" id="ajudante_nao" onclick="setAjudante('nao')">Não</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Origem</div>
+    <div class="field">
+      <label>Tipo de residência</label>
+      <div class="toggle-group">
+        <button class="tog active" id="orig_casa" onclick="setTipo('orig','casa')">🏠 Casa</button>
+        <button class="tog" id="orig_apto" onclick="setTipo('orig','apto')">🏢 Apartamento</button>
+      </div>
+    </div>
+    <div class="field" id="orig_elev_field" style="display:none;">
+      <label>Tem elevador?</label>
+      <div class="toggle-group">
+        <button class="tog active" id="orig_elev_sim" onclick="setElev('orig','sim')">Sim</button>
+        <button class="tog" id="orig_elev_nao" onclick="setElev('orig','nao')">Não</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Destino</div>
+    <div class="field">
+      <label>Tipo de residência</label>
+      <div class="toggle-group">
+        <button class="tog active" id="dest_casa" onclick="setTipo('dest','casa')">🏠 Casa</button>
+        <button class="tog" id="dest_apto" onclick="setTipo('dest','apto')">🏢 Apartamento</button>
+      </div>
+    </div>
+    <div class="field" id="dest_elev_field" style="display:none;">
+      <label>Tem elevador?</label>
+      <div class="toggle-group">
+        <button class="tog active" id="dest_elev_sim" onclick="setElev('dest','sim')">Sim</button>
+        <button class="tog" id="dest_elev_nao" onclick="setElev('dest','nao')">Não</button>
+      </div>
+    </div>
+  </div>
+
+  <button class="calc-btn" onclick="calcular()">Calcular orçamento →</button>
+
+</div>
+
+<div id="tab-resultado" class="page">
+  <div id="sem-resultado" class="card" style="text-align:center; padding: 2rem; color: var(--muted); font-size: 14px;">
+    Preencha os dados e calcule primeiro.
+  </div>
+  <div id="com-resultado" class="result-hidden">
+    <div class="result-total">
+      <div class="label">Valor total do serviço</div>
+      <div class="value" id="res_total">R$ 0,00</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Detalhamento</div>
+      <div class="items-list" id="items_list"></div>
+    </div>
+    <button class="share-btn" onclick="compartilhar()">📋 Copiar orçamento</button>
+  </div>
+</div>
+
+<div id="tab-config" class="page">
+  <div class="card">
+    <div class="card-title">Valores base</div>
+    <div class="config-row">
+      <label>Primeira viagem (Taxa Fixa)<small>Valor cobrado para a 1ª viagem</small></label>
+      <input type="number" id="cfg_primeira_viagem" value="80" step="10" inputmode="numeric">
+    </div>
+    <div class="config-row">
+      <label>Por km rodado<small>Cobrado sobre a distância total</small></label>
+      <input type="number" id="cfg_km" value="3.50" step="0.10" inputmode="decimal">
+    </div>
+    <div class="config-row">
+      <label>Viagem extra<small>A partir da 2ª viagem</small></label>
+      <input type="number" id="cfg_viagem" value="80" step="10" inputmode="numeric">
+    </div>
+    <div class="config-row">
+      <label>Por ajudante<small>Valor fixo cobrado se levar ajudante</small></label>
+      <input type="number" id="cfg_ajudante" value="120" step="10" inputmode="numeric">
+    </div>
+    <div class="config-row">
+      <label>Adicional apartamento<small>Cobrado se for apto (com ou sem elevador)</small></label>
+      <input type="number" id="cfg_apto" value="50" step="10" inputmode="numeric">
+    </div>
+    <div class="config-row">
+      <label>Adicional sem elevador<small>Cobrado se apto não tiver elevador</small></label>
+      <input type="number" id="cfg_semElev" value="40" step="5" inputmode="numeric">
+    </div>
+  </div>
+  <button class="save-btn" onclick="salvarConfig()">Salvar configurações</button>
+  <div class="saved-badge" id="saved_badge">✓ Configurações salvas!</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const estado = {
+  orig: { tipo: 'casa', elev: 'sim' },
+  dest: { tipo: 'casa', elev: 'sim' },
+  ajudante: 'nao'
+};
+
+function setTab(t, e) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + t).classList.add('active');
+  
+  if (e && e.target) {
+    e.target.classList.add('active');
+  } else {
+    const abas = document.querySelectorAll('.tab');
+    if (t === 'calcular') abas[0].classList.add('active');
+    if (t === 'resultado') abas[1].classList.add('active');
+    if (t === 'config') abas[2].classList.add('active');
+  }
+}
+
+function setTipo(local, tipo) {
+  estado[local].tipo = tipo;
+  document.getElementById(local + '_casa').classList.toggle('active', tipo === 'casa');
+  document.getElementById(local + '_apto').classList.toggle('active', tipo === 'apto');
+  document.getElementById(local + '_elev_field').style.display = tipo === 'apto' ? 'block' : 'none';
+}
+
+function setElev(local, v) {
+  estado[local].elev = v;
+  document.getElementById(local + '_elev_sim').classList.toggle('active', v === 'sim');
+  document.getElementById(local + '_elev_nao').classList.toggle('active', v === 'nao');
+}
+
+function setAjudante(v) {
+  estado.ajudante = v;
+  document.getElementById('ajudante_sim').classList.toggle('active', v === 'sim');
+  document.getElementById('ajudante_nao').classList.toggle('active', v === 'nao');
+}
+
+function fmt(v) {
+  return 'R$ ' + v.toFixed(2).replace('.', ',');
+}
+
+function calcular() {
+  const km = parseFloat(document.getElementById('distancia').value) || 0;
+  const viagens = parseInt(document.getElementById('viagens').value) || 1;
+
+  const cfgPrimeiraViagem = parseFloat(document.getElementById('cfg_primeira_viagem').value) || 80;
+  const cfgKm = parseFloat(document.getElementById('cfg_km').value) || 3.5;
+  const cfgViagem = parseFloat(document.getElementById('cfg_viagem').value) || 80;
+  const cfgAjudante = parseFloat(document.getElementById('cfg_ajudante').value) || 120;
+  const cfgApto = parseFloat(document.getElementById('cfg_apto').value) || 50;
+  const cfgSemElev = parseFloat(document.getElementById('cfg_semElev').value) || 40;
+
+  const valorPrimeiraViagem = cfgPrimeiraViagem;
+  const valorKm = km * cfgKm;
+  const valorViagensExtras = viagens > 1 ? (viagens - 1) * cfgViagem : 0;
+  const valorAjudantes = estado.ajudante === 'sim' ? cfgAjudante : 0;
+
+  const origApto = estado.orig.tipo === 'apto';
+  const destApto = estado.dest.tipo === 'apto';
+  const origSemElev = origApto && estado.orig.elev === 'nao';
+  const destSemElev = destApto && estado.dest.elev === 'nao';
+
+  const difOrigem = origApto ? cfgApto + (origSemElev ? cfgSemElev : 0) : 0;
+  const difDestino = destApto ? cfgApto + (destSemElev ? cfgSemElev : 0) : 0;
+
+  const total = valorPrimeiraViagem + valorKm + valorViagensExtras + valorAjudantes + difOrigem + difDestino;
+
+  document.getElementById('res_total').textContent = fmt(total);
+
+  let items = [];
+  items.push({ label: '1ª Viagem (Taxa fixa)', val: valorPrimeiraViagem });
+  if (km > 0) items.push({ label: km + ' km × ' + fmt(cfgKm), val: valorKm });
+  if (viagens > 1) items.push({ label: (viagens - 1) + ' viagem(ns) extra(s)', val: valorViagensExtras });
+  if (estado.ajudante === 'sim') items.push({ label: 'Serviço com Ajudante', val: valorAjudantes });
+  if (origApto) items.push({ label: 'Origem: apartamento' + (origSemElev ? ' s/ elevador' : ' c/ elevador'), val: difOrigem });
+  if (destApto) items.push({ label: 'Destino: apartamento' + (destSemElev ? ' s/ elevador' : ' c/ elevador'), val: difDestino });
+
+  const list = document.getElementById('items_list');
+  list.innerHTML = items.map(i =>
+    `<div class="item-row"><span class="item-label">${i.label}</span><span class="item-val">${fmt(i.val)}</span></div>`
+  ).join('') + `<div class="item-row" style="font-weight:600;"><span>Total</span><span class="item-val" style="font-size:15px;">${fmt(total)}</span></div>`;
+
+  document.getElementById('sem-resultado').style.display = 'none';
+  document.getElementById('com-resultado').style.display = 'block';
+
+  window._lastCalc = { km, viagens, total, items };
+
+  setTab('resultado', null);
+  showToast('Orçamento calculado!');
+}
+
+function compartilhar() {
+  const c = window._lastCalc;
+  if (!c) return;
+  let txt = '🚛 Orçamento de Frete/Mudança\n';
+  txt += '─────────────────\n';
+  c.items.forEach(i => { txt += i.label + ': ' + fmt(i.val) + '\n'; });
+  txt += '─────────────────\n';
+  txt += 'TOTAL: ' + fmt(c.total) + '\n';
+
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(txt).then(() => showToast('Copiado para área de transferência!'));
+  } else {
+    const ta = document.createElement('textarea');
+    ta.value = txt;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Copiado!');
+  }
+}
+
+function salvarConfig() {
+  showToast('Configurações salvas!');
+  const badge = document.getElementById('saved_badge');
+  badge.style.display = 'block';
+  setTimeout(() => { badge.style.display = 'none'; }, 2500);
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+</script>
+</body>
+</html>
